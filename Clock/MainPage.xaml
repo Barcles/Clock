@@ -9,6 +9,30 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Grid Width="300" Height="300">
+            <Ellipse Width="300" Height="300" Fill="Blue"></Ellipse>
+            <Image x:Name="Clock" Source="Clock.png" Margin="-26,-18,-26,-18" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
+            <!--for Second -->
+            <Rectangle Margin="150,0,149,150" Name="second" Stroke="Red" Height="120" VerticalAlignment="Bottom">
+                <Rectangle.RenderTransform>
+                    <RotateTransform x:Name="secondHand" CenterX="0" CenterY="120" Angle="0" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+
+            <!-- for Minute -->
+            <Rectangle Margin="150,49,149,151" Name="minute" Stroke="Black">
+                <Rectangle.RenderTransform>
+                    <RotateTransform x:Name="minuteHand" CenterX="0" CenterY="100" Angle="0" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+
+            <!-- for Hour -->
+            <Rectangle Margin="150,80,149,150" Name="hour " Stroke="Black">
+                <Rectangle.RenderTransform>
+                    <RotateTransform x:Name="hourHand" CenterX="0" CenterY="70" Angle="0" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Grid>
     </Grid>
 </Page>

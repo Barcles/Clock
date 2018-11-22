@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
+// References:
+// https://www.c-sharpcorner.com/article/create-an-analog-clock-for-windows-10-universal-application/
+
 namespace Clock
 {
     /// <summary>
@@ -22,9 +25,20 @@ namespace Clock
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        DispatcherTimer timer = new DispatcherTimer();  // Initializing Dispatch Timer
         public MainPage()
         {
             this.InitializeComponent();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object sender, object e)    // Takes the time from Windows and sets the position of the hands
+        {
+            secondHand.Angle = DateTime.Now.Second * 6;
+            minuteHand.Angle = DateTime.Now.Minute * 6;
+            hourHand.Angle = DateTime.Now.Hour * 30;
         }
     }
 }
