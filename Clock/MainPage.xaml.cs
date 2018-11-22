@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 // References:
 // https://www.c-sharpcorner.com/article/create-an-analog-clock-for-windows-10-universal-application/
+// https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/transforms-overview
 
 namespace Clock
 {
@@ -29,7 +30,7 @@ namespace Clock
         public MainPage()
         {
             this.InitializeComponent();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromSeconds(1);   // Sets the amount between timer ticks based on 1000ms
             timer.Tick += Timer_Tick;
             timer.Start();
         }
