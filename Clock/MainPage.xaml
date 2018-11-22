@@ -28,7 +28,7 @@
             </Rectangle>
 
             <!-- for Hour -->
-            <Rectangle Margin="150,80,149,150" Name="hour " Stroke="Black">
+            <Rectangle Margin="150,80,149,150" Name="hour " Stroke="LightGray">
                 <Rectangle.RenderTransform>
                     <RotateTransform x:Name="hourHand" CenterX="0" CenterY="70" Angle="0" />
                 </Rectangle.RenderTransform>
