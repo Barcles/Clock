@@ -36,9 +36,9 @@ namespace Clock
 
         private void Timer_Tick(object sender, object e)    // Takes the time from Windows and sets the position of the hands
         {
-            secondHand.Angle = DateTime.Now.Second * 6;
-            minuteHand.Angle = DateTime.Now.Minute * 6;
-            hourHand.Angle = DateTime.Now.Hour * 30;
+            secondHand.Angle = DateTime.Now.Second * 6; // 60 positions on the clock for seconds --> 360/60 = 6 
+            minuteHand.Angle = DateTime.Now.Minute * 6; // 60 positions on the clock for minutes --> 360/60 = 6
+            hourHand.Angle = DateTime.Now.Hour * 30;    // 12 positions on the clock for hours --> 360/12 = 30
         }
     }
 }
