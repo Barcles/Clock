@@ -41,7 +41,7 @@ namespace Clock
         private ObservableCollection<DeviceInformation> listOfDevices;
         private CancellationTokenSource ReadCancellationTokenSource;
 
-        string recived = "";
+        string received = "";
 //--------------------------------------------------------------------------------------------------
 
         public MainPage()
@@ -167,53 +167,53 @@ namespace Clock
 
             if (bytesRead > 0)
             {
-                recived += dataReaderObject.ReadString(bytesRead);  // Allows user to see data being received from the stream
+                received += dataReaderObject.ReadString(bytesRead);  // Allows user to see data being received from the stream
                 // txtRecieved.Text = recived;
-                if (recived[0] == '#')
+                if (received[0] == '#')
                 {
-                    if (recived.Length > 3)
+                    if (received.Length > 3)
                     {
-                        if (recived[2] == '#')
+                        if (received[2] == '#')
                         {
                             //txtRecieved.Text = recived;
-                            if (recived.Length > 42)
+                            if (received.Length > 42)
                             {
-                                txtRecieved.Text = recived + txtRecieved.Text;  // Adds new text to the top of received buffer
+                                txtRecieved.Text = received + txtRecieved.Text;  // Adds new text to the top of received buffer
                                 // add parse code 
-                                txtPacketNum.Text = recived.Substring(3, 3);
-                                txtAN0.Text = recived.Substring(6, 4);
-                                txtAN1.Text = recived.Substring(10, 4);
-                                txtAN2.Text = recived.Substring(14, 4);
-                                txtAN3.Text = recived.Substring(18, 4);
-                                txtAN4.Text = recived.Substring(22, 4);
-                                txtAN5.Text = recived.Substring(26, 4);
-                                txtBinOut.Text = recived.Substring(30, 8);
-                                txtCalChkSum.Text = recived.Substring(38, 3);
+                                txtPacketNum.Text = received.Substring(3, 3);
+                                txtAN0.Text = received.Substring(6, 4);
+                                txtAN1.Text = received.Substring(10, 4);
+                                txtAN2.Text = received.Substring(14, 4);
+                                txtAN3.Text = received.Substring(18, 4);
+                                txtAN4.Text = received.Substring(22, 4);
+                                txtAN5.Text = received.Substring(26, 4);
+                                txtBinOut.Text = received.Substring(30, 8);
+                                txtCalChkSum.Text = received.Substring(38, 3);
 
                                 for (int i = 3; i < 38; i++)
                                 {
-                                    calChkSum += (byte)recived[i];
+                                    calChkSum += (byte)received[i];
                                 }
                                 txtCalChkSum.Text = Convert.ToString(calChkSum);
-                                int an0 = Convert.ToInt32(recived.Substring(6, 4));
-                                int an1 = Convert.ToInt32(recived.Substring(10, 4));
-                                int an2 = Convert.ToInt32(recived.Substring(14, 4));
-                                int an3 = Convert.ToInt32(recived.Substring(18, 4));
-                                int an4 = Convert.ToInt32(recived.Substring(22, 4));
-                                int an5 = Convert.ToInt32(recived.Substring(26, 4));
+                                int an0 = Convert.ToInt32(received.Substring(6, 4));
+                                int an1 = Convert.ToInt32(received.Substring(10, 4));
+                                int an2 = Convert.ToInt32(received.Substring(14, 4));
+                                int an3 = Convert.ToInt32(received.Substring(18, 4));
+                                int an4 = Convert.ToInt32(received.Substring(22, 4));
+                                int an5 = Convert.ToInt32(received.Substring(26, 4));
 
-                                int recChkSum = Convert.ToInt32(recived.Substring(38, 3));
+                                int recChkSum = Convert.ToInt32(received.Substring(38, 3));
                                 calChkSum %= 1000;
                                 if (recChkSum == calChkSum) // Packet is sent
                                 {
 
                                 }
-                                recived = "";   // clears out received buffer
+                                received = "";   // clears out received buffer
                             }
                         }
                         else
                         {
-                            recived = "";   // clears out received buffer
+                            received = "";   // clears out received buffer
                         }
 
                     }
@@ -221,48 +221,48 @@ namespace Clock
                 }
                 else
                 {
-                    recived = "";   // clears out received buffer
+                    received = "";   // clears out received buffer
                 }
             }
         }
 
-        //private async void ButtonWrite_Click(object sender, RoutedEventArgs e)  // Sends out data on button click
-        //{
-        //    if (serialPort != null) // Check to see if there is something in serial port
-        //    {
-        //        var dataPacket = txtSend.Text.ToString();   // Converts data from text block to string
-        //        dataWriterObject = new DataWriter(serialPort.OutputStream);
-        //        await SendPacket(dataPacket);
+        private async void ButtonWrite_Click(object sender, RoutedEventArgs e)  // Sends out data on button click
+        {
+            if (serialPort != null) // Check to see if there is something in serial port
+            {
+                var dataPacket = txtSend.Text.ToString();   // Converts data from text block to string
+                dataWriterObject = new DataWriter(serialPort.OutputStream);
+                await SendPacket(dataPacket);
 
-        //        if (dataWriterObject != null)   // Handles situation if problem arrises
-        //        {
-        //            dataWriterObject.DetachStream();
-        //            dataWriterObject = null;
-        //        }
+                if (dataWriterObject != null)   // Handles situation if problem arrises
+                {
+                    dataWriterObject.DetachStream();
+                    dataWriterObject = null;
+                }
 
-        //    }
-        //}
+            }
+        }
 
-        //private async Task SendPacket(string value)
-        //{
-        //    var dataPacket = value;
-        //    Task<UInt32> storeAsyncTask;
-        //    if (dataPacket.Length != 0) // If datapacket length is not = 0, then we can send it
-        //    {
-        //        dataWriterObject.WriteString(dataPacket);   // Writes datapacket to a string
+        private async Task SendPacket(string value)
+        {
+            var dataPacket = value;
+            Task<UInt32> storeAsyncTask;
+            if (dataPacket.Length != 0) // If datapacket length is not = 0, then we can send it
+            {
+                dataWriterObject.WriteString(dataPacket);   // Writes datapacket to a string
 
-        //        storeAsyncTask = dataWriterObject.StoreAsync().AsTask();
+                storeAsyncTask = dataWriterObject.StoreAsync().AsTask();
 
-        //        UInt32 bytesWritten = await storeAsyncTask; // Variable created to see how many bytes are written
-        //        if (bytesWritten > 0)   // If there are available writes
-        //        {
-        //            txtMessage.Text = "Values Set Correctly";   // Reports that code was executed
-        //        }
-        //    }
-        //    else   // Error Reporting
-        //    {
-        //        txtMessage.Text = "No Value Sent";
-        //    }
-        //}
+                UInt32 bytesWritten = await storeAsyncTask; // Variable created to see how many bytes are written
+                if (bytesWritten > 0)   // If there are available writes
+                {
+                    txtMessage.Text = "Values Set Correctly";   // Reports that code was executed
+                }
+            }
+            else   // Error Reporting
+            {
+                txtMessage.Text = "No Value Sent";
+            }
+        }
     }
 }
