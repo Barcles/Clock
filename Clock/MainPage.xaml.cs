@@ -42,7 +42,7 @@ namespace Clock
         private CancellationTokenSource ReadCancellationTokenSource;
 
         string received = "";
-        bool DataState = false;
+        bool DataState = false; //Setting state for debugging button
 //--------------------------------------------------------------------------------------------------
 
         public MainPage()
@@ -270,16 +270,20 @@ namespace Clock
             }
         }
 
-        private void DataReceived_Click(object sender, RoutedEventArgs e)
+        private void DataReceived_Click(object sender, RoutedEventArgs e)   //Hides debugging menu
         {
             DataState = !DataState;
             if(DataState == true)
             {
                 txtRecieved.Visibility = Visibility.Visible;
+                txtSend.Visibility = Visibility.Visible;
+                Packets.Visibility = Visibility.Visible;
             }
             else if (DataState == false)
             {
                 txtRecieved.Visibility = Visibility.Collapsed;
+                txtSend.Visibility = Visibility.Collapsed;
+                Packets.Visibility = Visibility.Collapsed;
             }
 
         }
