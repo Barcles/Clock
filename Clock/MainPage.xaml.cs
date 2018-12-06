@@ -42,6 +42,7 @@ namespace Clock
         private CancellationTokenSource ReadCancellationTokenSource;
 
         string received = "";
+        bool DataState = false;
 //--------------------------------------------------------------------------------------------------
 
         public MainPage()
@@ -176,38 +177,42 @@ namespace Clock
                         if (received[2] == '#')
                         {
                             //txtRecieved.Text = recived;
-                            if (received.Length > 42)
+                            if (received.Length > 45 )//&& received.Length < 45)
                             {
                                 txtRecieved.Text = received + txtRecieved.Text;  // Adds new text to the top of received buffer
+                                txtSend.Text = received.Substring(41,2);
+                                txtSend.Text += " ";
+                                txtSend.Text += received.Substring(43, 2);
+
                                 // add parse code 
-                                txtPacketNum.Text = received.Substring(3, 3);
-                                txtAN0.Text = received.Substring(6, 4);
-                                txtAN1.Text = received.Substring(10, 4);
-                                txtAN2.Text = received.Substring(14, 4);
-                                txtAN3.Text = received.Substring(18, 4);
-                                txtAN4.Text = received.Substring(22, 4);
-                                txtAN5.Text = received.Substring(26, 4);
-                                txtBinOut.Text = received.Substring(30, 8);
-                                txtCalChkSum.Text = received.Substring(38, 3);
+                                //txtPacketNum.Text = received.Substring(3, 3);
+                                //txtAN0.Text = received.Substring(6, 4);
+                                //txtAN1.Text = received.Substring(10, 4);
+                                //txtAN2.Text = received.Substring(14, 4);
+                                //txtAN3.Text = received.Substring(18, 4);
+                                //txtAN4.Text = received.Substring(22, 4);
+                                //txtAN5.Text = received.Substring(26, 4);
+                                //txtBinOut.Text = received.Substring(30, 8);
+                                //txtCalChkSum.Text = received.Substring(38, 3);
 
-                                for (int i = 3; i < 38; i++)
-                                {
-                                    calChkSum += (byte)received[i];
-                                }
-                                txtCalChkSum.Text = Convert.ToString(calChkSum);
-                                int an0 = Convert.ToInt32(received.Substring(6, 4));
-                                int an1 = Convert.ToInt32(received.Substring(10, 4));
-                                int an2 = Convert.ToInt32(received.Substring(14, 4));
-                                int an3 = Convert.ToInt32(received.Substring(18, 4));
-                                int an4 = Convert.ToInt32(received.Substring(22, 4));
-                                int an5 = Convert.ToInt32(received.Substring(26, 4));
+                                //                for (int i = 3; i < 38; i++)
+                                //                {
+                                //                    calChkSum += (byte)received[i];
+                                //                }
+                                //                txtCalChkSum.Text = Convert.ToString(calChkSum);
+                                //                int an0 = Convert.ToInt32(received.Substring(6, 4));
+                                //                int an1 = Convert.ToInt32(received.Substring(10, 4));
+                                //                int an2 = Convert.ToInt32(received.Substring(14, 4));
+                                //                int an3 = Convert.ToInt32(received.Substring(18, 4));
+                                //                int an4 = Convert.ToInt32(received.Substring(22, 4));
+                                //                int an5 = Convert.ToInt32(received.Substring(26, 4));
 
-                                int recChkSum = Convert.ToInt32(received.Substring(38, 3));
-                                calChkSum %= 1000;
-                                if (recChkSum == calChkSum) // Packet is sent
-                                {
+                                //                int recChkSum = Convert.ToInt32(received.Substring(38, 3));
+                                //                calChkSum %= 1000;
+                                //                if (recChkSum == calChkSum) // Packet is sent
+                                //                {
 
-                                }
+                                //                }
                                 received = "";   // clears out received buffer
                             }
                         }
@@ -263,6 +268,20 @@ namespace Clock
             {
                 txtMessage.Text = "No Value Sent";
             }
+        }
+
+        private void DataReceived_Click(object sender, RoutedEventArgs e)
+        {
+            DataState = !DataState;
+            if(DataState == true)
+            {
+                txtRecieved.Visibility = Visibility.Visible;
+            }
+            else if (DataState == false)
+            {
+                txtRecieved.Visibility = Visibility.Collapsed;
+            }
+
         }
     }
 }
