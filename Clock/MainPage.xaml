@@ -34,5 +34,10 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
         </Grid>
+        
+        <StackPanel Orientation="Vertical" Margin="0,10,0,0" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                
+            </StackPanel>
     </Grid>
 </Page>
