@@ -33,10 +33,16 @@ namespace Clock
     public sealed partial class MainPage : Page
     {
         DispatcherTimer timer = new DispatcherTimer();  // Initializing Dispatch Timer
-        private SerialDevice serialPort = null;
 
+//--------------------------------------------------------------------------------------------------
+        private SerialDevice serialPort = null;
         DataWriter dataWriterObject = null;
         DataReader dataReaderObject = null;
+        private ObservableCollection<DeviceInformation> listOfDevices;
+        private CancellationTokenSource ReadCancellationTokenSource;
+
+        string recived = "";
+//--------------------------------------------------------------------------------------------------
 
         public MainPage()
         {
