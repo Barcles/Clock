@@ -60,7 +60,9 @@ namespace Clock
         {
             secondHand.Angle = DateTime.Now.Second * 6; // 60 positions on the clock for seconds --> 360/60 = 6 
             minuteHand.Angle = DateTime.Now.Minute * 6; // 60 positions on the clock for minutes --> 360/60 = 6
-            hourHand.Angle = DateTime.Now.Hour * 30;    // 12 positions on the clock for hours --> 360/12 = 30
+
+            // Moving 30 degrees for each hour + 0.5 degrees to account for minute hand moving
+            hourHand.Angle = DateTime.Now.Hour * 30 + DateTime.Now.Minute * 0.5;    
         }
 
         private async void ListAvailablePorts()
@@ -183,6 +185,10 @@ namespace Clock
                                 txtSend.Text = received.Substring(41,2);
                                 txtSend.Text += " ";
                                 txtSend.Text += received.Substring(43, 2);
+
+                                var HumidPos = Convert.ToInt16(received.Substring(43, 2));
+
+                                HumidityHand.Angle = HumidPos;
 
                                 // add parse code 
                                 //txtPacketNum.Text = received.Substring(3, 3);
