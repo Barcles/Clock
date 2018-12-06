@@ -84,147 +84,147 @@ namespace Clock
             }
         }
 
-        //private void ButtonConnectToDevice_Click(object sender, RoutedEventArgs e)  // Calls function when "connect to device" button is clicked
-        //{
-        //    SerialPortConfiguration();
-        //}
+        private void ButtonConnectToDevice_Click(object sender, RoutedEventArgs e)  // Calls function when "connect to device" button is clicked
+        {
+            SerialPortConfiguration();
+        }
 
-        //private async void SerialPortConfiguration()    // Takes selection from list box 
-        //{
-        //    var selection = lstSerialDevices.SelectedItems;
+        private async void SerialPortConfiguration()    // Takes selection from list box 
+        {
+            var selection = lstSerialDevices.SelectedItems;
 
-        //    if (selection.Count <= 0)   // Check to make sure something is selected
-        //    {
-        //        txtMessage.Text = "Select an object for serial connection!";    // Error reporting if nothing is selected
-        //        return;
-        //    }
+            if (selection.Count <= 0)   // Check to make sure something is selected
+            {
+                txtMessage.Text = "Select an object for serial connection!";    // Error reporting if nothing is selected
+                return;
+            }
 
-        //    DeviceInformation entry = (DeviceInformation)selection[0];
-        //    try
-        //    {
-        //        serialPort = await SerialDevice.FromIdAsync(entry.Id);  // Choose device based on ID
-        //        serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);  // Write timeout
-        //        serialPort.ReadTimeout = TimeSpan.FromMilliseconds(1000);   // Read timeout
-        //        serialPort.BaudRate = 115200;
-        //        serialPort.Parity = SerialParity.None;
-        //        serialPort.StopBits = SerialStopBitCount.One;
-        //        serialPort.DataBits = 8;
-        //        serialPort.Handshake = SerialHandshake.None;
-        //        txtMessage.Text = "Serial Port Correctly Configured!";
+            DeviceInformation entry = (DeviceInformation)selection[0];
+            try
+            {
+                serialPort = await SerialDevice.FromIdAsync(entry.Id);  // Choose device based on ID
+                serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);  // Write timeout
+                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(1000);   // Read timeout
+                serialPort.BaudRate = 115200;
+                serialPort.Parity = SerialParity.None;
+                serialPort.StopBits = SerialStopBitCount.One;
+                serialPort.DataBits = 8;
+                serialPort.Handshake = SerialHandshake.None;
+                txtMessage.Text = "Serial Port Correctly Configured!";
 
-        //        ReadCancellationTokenSource = new CancellationTokenSource();
+                ReadCancellationTokenSource = new CancellationTokenSource();
 
-        //        Listen();   // If there is a serial port device, function call Listen()
-        //    }
+                Listen();   // If there is a serial port device, function call Listen()
+            }
 
-        //    catch (Exception ex)    // Error reporting
-        //    {
-        //        txtMessage.Text = ex.Message;
-        //    }
-        //}
+            catch (Exception ex)    // Error reporting
+            {
+                txtMessage.Text = ex.Message;
+            }
+        }
 
-        //private async void Listen()
-        //{
-        //    try
-        //    {
-        //        if (serialPort != null) // Check to see if there is serial port device
-        //        {
-        //            dataReaderObject = new DataReader(serialPort.InputStream);
+        private async void Listen()
+        {
+            try
+            {
+                if (serialPort != null) // Check to see if there is serial port device
+                {
+                    dataReaderObject = new DataReader(serialPort.InputStream);
 
-        //            while (true)    // Infinite loop to read data continuously
-        //            {
-        //                await ReadData(ReadCancellationTokenSource.Token);  // Runs continuously in background
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        txtMessage.Text = ex.Message;
+                    while (true)    // Infinite loop to read data continuously
+                    {
+                        await ReadData(ReadCancellationTokenSource.Token);  // Runs continuously in background
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                txtMessage.Text = ex.Message;
 
-        //        // if(ex.GetType.Name == "TaskCancelledException")
-        //    }
-        //    finally
-        //    {
+                // if(ex.GetType.Name == "TaskCancelledException")
+            }
+            finally
+            {
 
-        //    }
-        //}
+            }
+        }
 
-        //private async Task ReadData(CancellationToken cancellationToken)
-        //{
-        //    Task<UInt32> loadAsyncTask;
+        private async Task ReadData(CancellationToken cancellationToken)
+        {
+            Task<UInt32> loadAsyncTask;
 
-        //    int calChkSum = 0;
+            int calChkSum = 0;
 
-        //    uint ReadBufferLength = 1;
+            uint ReadBufferLength = 1;
 
-        //    cancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
-        //    dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
+            dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
 
-        //    loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
+            loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
 
-        //    UInt32 bytesRead = await loadAsyncTask;
+            UInt32 bytesRead = await loadAsyncTask;
 
-        //    if (bytesRead > 0)
-        //    {
-        //        recived += dataReaderObject.ReadString(bytesRead);  // Allows user to see data being received from the stream
-        //        // txtRecieved.Text = recived;
-        //        if (recived[0] == '#')
-        //        {
-        //            if (recived.Length > 3)
-        //            {
-        //                if (recived[2] == '#')
-        //                {
-        //                    //txtRecieved.Text = recived;
-        //                    if (recived.Length > 42)
-        //                    {
-        //                        txtRecieved.Text = recived + txtRecieved.Text;  // Adds new text to the top of received buffer
-        //                        // add parse code 
-        //                        txtPacketNum.Text = recived.Substring(3, 3);
-        //                        txtAN0.Text = recived.Substring(6, 4);
-        //                        txtAN1.Text = recived.Substring(10, 4);
-        //                        txtAN2.Text = recived.Substring(14, 4);
-        //                        txtAN3.Text = recived.Substring(18, 4);
-        //                        txtAN4.Text = recived.Substring(22, 4);
-        //                        txtAN5.Text = recived.Substring(26, 4);
-        //                        txtBinOut.Text = recived.Substring(30, 8);
-        //                        txtCalChkSum.Text = recived.Substring(38, 3);
+            if (bytesRead > 0)
+            {
+                recived += dataReaderObject.ReadString(bytesRead);  // Allows user to see data being received from the stream
+                // txtRecieved.Text = recived;
+                if (recived[0] == '#')
+                {
+                    if (recived.Length > 3)
+                    {
+                        if (recived[2] == '#')
+                        {
+                            //txtRecieved.Text = recived;
+                            if (recived.Length > 42)
+                            {
+                                txtRecieved.Text = recived + txtRecieved.Text;  // Adds new text to the top of received buffer
+                                // add parse code 
+                                txtPacketNum.Text = recived.Substring(3, 3);
+                                txtAN0.Text = recived.Substring(6, 4);
+                                txtAN1.Text = recived.Substring(10, 4);
+                                txtAN2.Text = recived.Substring(14, 4);
+                                txtAN3.Text = recived.Substring(18, 4);
+                                txtAN4.Text = recived.Substring(22, 4);
+                                txtAN5.Text = recived.Substring(26, 4);
+                                txtBinOut.Text = recived.Substring(30, 8);
+                                txtCalChkSum.Text = recived.Substring(38, 3);
 
-        //                        for (int i = 3; i < 38; i++)
-        //                        {
-        //                            calChkSum += (byte)recived[i];
-        //                        }
-        //                        txtCalChkSum.Text = Convert.ToString(calChkSum);
-        //                        int an0 = Convert.ToInt32(recived.Substring(6, 4));
-        //                        int an1 = Convert.ToInt32(recived.Substring(10, 4));
-        //                        int an2 = Convert.ToInt32(recived.Substring(14, 4));
-        //                        int an3 = Convert.ToInt32(recived.Substring(18, 4));
-        //                        int an4 = Convert.ToInt32(recived.Substring(22, 4));
-        //                        int an5 = Convert.ToInt32(recived.Substring(26, 4));
+                                for (int i = 3; i < 38; i++)
+                                {
+                                    calChkSum += (byte)recived[i];
+                                }
+                                txtCalChkSum.Text = Convert.ToString(calChkSum);
+                                int an0 = Convert.ToInt32(recived.Substring(6, 4));
+                                int an1 = Convert.ToInt32(recived.Substring(10, 4));
+                                int an2 = Convert.ToInt32(recived.Substring(14, 4));
+                                int an3 = Convert.ToInt32(recived.Substring(18, 4));
+                                int an4 = Convert.ToInt32(recived.Substring(22, 4));
+                                int an5 = Convert.ToInt32(recived.Substring(26, 4));
 
-        //                        int recChkSum = Convert.ToInt32(recived.Substring(38, 3));
-        //                        calChkSum %= 1000;
-        //                        if (recChkSum == calChkSum) // Packet is sent
-        //                        {
+                                int recChkSum = Convert.ToInt32(recived.Substring(38, 3));
+                                calChkSum %= 1000;
+                                if (recChkSum == calChkSum) // Packet is sent
+                                {
 
-        //                        }
-        //                        recived = "";   // clears out received buffer
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    recived = "";   // clears out received buffer
-        //                }
+                                }
+                                recived = "";   // clears out received buffer
+                            }
+                        }
+                        else
+                        {
+                            recived = "";   // clears out received buffer
+                        }
 
-        //            }
+                    }
 
-        //        }
-        //        else
-        //        {
-        //            recived = "";   // clears out received buffer
-        //        }
-        //    }
-        //}
+                }
+                else
+                {
+                    recived = "";   // clears out received buffer
+                }
+            }
+        }
 
         //private async void ButtonWrite_Click(object sender, RoutedEventArgs e)  // Sends out data on button click
         //{

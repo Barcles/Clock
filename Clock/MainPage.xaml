@@ -43,12 +43,13 @@
             <TextBlock Text="Select a device: "/>
             <ListBox x:Name ="lstSerialDevices" Height="100">
             <ListBox.ItemTemplate>
-                <DataTemplate.>
-                    <TextBlock Text="{Binding ID"}/>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ID}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             </ListBox>
             <TextBlock x:Name="txtMessage" Text="Message" Margin="10,10,0,0"/>
+            
         </StackPanel>
     </Grid>
 </Page>
