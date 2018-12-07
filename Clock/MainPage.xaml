@@ -16,14 +16,15 @@
 
                 <Rectangle Name="HumidityNeedle" Fill="Black" HorizontalAlignment="Left" Height="124" Margin="150,35,0,0" VerticalAlignment="Top" Width="4" UseLayoutRounding="False" d:LayoutRounding="Auto">
                     <Rectangle.RenderTransform>
-                        <RotateTransform x:Name="HumidityHand" CenterX="0" CenterY="120" Angle="0" />
+                        <RotateTransform x:Name="HumidityHand" CenterX="0" CenterY="120" Angle="0"/>
                     </Rectangle.RenderTransform>
                 </Rectangle>
+                <TextBlock x:Name="HumidRead" FontSize="25" HorizontalAlignment="Left" Margin="130,191,0,0" VerticalAlignment="Top" Width="91" Height="45"/>
 
 
             </Grid>
-            <Grid Width="300" Height="300">
-                <Ellipse Width="300" Height="300" Fill="Blue"></Ellipse>
+            <Grid Width="300" Height="300" Margin="150,0,0,0">
+                <Ellipse Width="300" Height="300"></Ellipse>
                 <Image x:Name="Clock" Source="Clock.png" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
 
@@ -47,6 +48,18 @@
                         <RotateTransform x:Name="hourHand" CenterX="0" CenterY="70" Angle="0" />
                     </Rectangle.RenderTransform>
                 </Rectangle>
+            </Grid>
+
+            <Grid Width="300" Height="300">
+                <Rectangle Name="TempBackground" Fill="White" Margin="135,10,143,27" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Ellipse Fill="White" Margin="135,0,143,283" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <Rectangle x:Name="TempRect" VerticalAlignment="Bottom" Fill="Red" Margin="136,0,143,50" Height="221"/>
+                <Image x:Name="TempRectangle" Source="Temp.png" Margin="-107,-20,-237,-33"/>
+                <TextBlock x:Name="tempRead" FontSize="18" HorizontalAlignment="Left" Margin="126,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="76" Height="34">
+                    <TextBlock.RenderTransform>
+                        <CompositeTransform ScaleX="1"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
             </Grid>
 
         </StackPanel>

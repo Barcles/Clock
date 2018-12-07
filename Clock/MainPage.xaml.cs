@@ -182,13 +182,21 @@ namespace Clock
                             if (received.Length > 45 )//&& received.Length < 45)
                             {
                                 txtRecieved.Text = received + txtRecieved.Text;  // Adds new text to the top of received buffer
-                                txtSend.Text = received.Substring(41,2);
+                                txtSend.Text = received.Substring(41,2);    // Temperature extracted from string sent by arduino
                                 txtSend.Text += " ";
-                                txtSend.Text += received.Substring(43, 2);
+                                txtSend.Text += received.Substring(43, 2);  // Humidity extracted from string sent by arduino
 
-                                var HumidPos = Convert.ToInt16(received.Substring(43, 2));
+                                var tempMath = 20/3;
+                                var tempPos = Convert.ToInt16(received.Substring(41, 2));   //Converting received temperature string to int
+                                TempRect.Height = tempPos * tempMath;   //Aligns temperature with thermometer
+                                tempRead.Text = string.Format("{0}°C", tempPos);    //Prints temperature reading to textblock
 
-                                HumidityHand.Angle = HumidPos;
+                                var angle0 = 193;   //Zero point for the humidity display
+                                var math = (326 / 100); //326 degrees (useable circle / 100 points on circle)
+                                var HumidPos = Convert.ToInt16(received.Substring(43, 2));  //Converting received humidity string to int
+                                //Converting humidity int to angle for the needle, 163 degrees is half of useable circle
+                                HumidityHand.Angle = (HumidPos) * math - 163;
+                                HumidRead.Text = string.Format("{0}%", HumidPos);  //Prints humidity reading to textblock
 
                                 // add parse code 
                                 //txtPacketNum.Text = received.Substring(3, 3);
