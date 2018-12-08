@@ -43,7 +43,7 @@ namespace Clock
 
         string received = "";
         bool DataState = false; //Setting state for debugging button
-//--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
 
         public MainPage()
         {
@@ -52,7 +52,7 @@ namespace Clock
             timer.Tick += Timer_Tick;
             timer.Start();
 
-            listOfDevices = new ObservableCollection<DeviceInformation>();
+            listOfDevices = new ObservableCollection<DeviceInformation>();  //Populates list of available devices
             ListAvailablePorts();
         }
         
@@ -191,12 +191,60 @@ namespace Clock
                                 TempRect.Height = tempPos * tempMath;   //Aligns temperature with thermometer
                                 tempRead.Text = string.Format("{0}°C", tempPos);    //Prints temperature reading to textblock
 
-                                var angle0 = 193;   //Zero point for the humidity display
+                                //var angle0 = 193;   //Zero point for the humidity display
                                 var math = (326 / 100); //326 degrees (useable circle / 100 points on circle)
                                 var HumidPos = Convert.ToInt16(received.Substring(43, 2));  //Converting received humidity string to int
                                 //Converting humidity int to angle for the needle, 163 degrees is half of useable circle
                                 HumidityHand.Angle = (HumidPos) * math - 163;
-                                HumidRead.Text = string.Format("{0}%", HumidPos);  //Prints humidity reading to textblock
+                                HumidRead.Text = string.Format("Humidity {0}%", HumidPos);  //Prints humidity reading to textblock
+
+                                if (serialPort != null) // Check to see if there is something in serial port
+                                {
+                                    //var dataPacket = txtSend.Text.ToString();   // Converts data from text block to string
+                                    int secTX = DateTime.Now.Second;    //Variable created to track current seconds
+                                    int minuteTX = DateTime.Now.Minute; //Variable created to track current minutes
+                                    int hourTX = DateTime.Now.Hour;     //Variable created to track current hours
+                                    string amPM = "";
+
+                                    string secString = secTX.ToString();    //Converted current seconds to string
+                                    if (secTX < 10)
+                                    {
+                                        secString = "0" + secString;    //Placing 0 in front of "ones" second to keep string consistent
+                                    }
+
+                                    string minString = minuteTX.ToString(); //Converted current minutes to string
+                                    if (minuteTX < 10)
+                                    {
+                                        minString = "0" + minString;    //Placing 0 in front of "ones" minute to keep string consistent
+                                    }
+                                    
+                                    string hourString = hourTX.ToString();  //Converted current hours to string
+                                    if (hourTX < 10)
+                                    {
+                                        if (hourTX > 12)
+                                        {
+                                            amPM = " PM";
+                                            hourTX = hourTX - 12;
+                                        }
+                                        else
+                                        {
+                                            amPM = " AM";
+                                        }
+                                        hourString = " " + hourString;
+                                    }
+
+                                    string toSend = "###" + hourString + ":" + minString + ":" + secString + amPM; //Combining all strings together
+                                    //var dataPacket = ClockSend.Text.ToString();
+                                    dataWriterObject = new DataWriter(serialPort.OutputStream);
+                                    await SendPacket(toSend);   //Sending string
+
+                                    if (dataWriterObject != null)   // Handles situation if problem arrises
+                                    {
+                                        dataWriterObject.DetachStream();
+                                        dataWriterObject = null;
+                                    }
+
+                                }
 
                                 // add parse code 
                                 //txtPacketNum.Text = received.Substring(3, 3);
@@ -245,22 +293,23 @@ namespace Clock
             }
         }
 
-        private async void ButtonWrite_Click(object sender, RoutedEventArgs e)  // Sends out data on button click
-        {
-            if (serialPort != null) // Check to see if there is something in serial port
-            {
-                var dataPacket = txtSend.Text.ToString();   // Converts data from text block to string
-                dataWriterObject = new DataWriter(serialPort.OutputStream);
-                await SendPacket(dataPacket);
+        //private async void ButtonWrite_Click(object sender, RoutedEventArgs e)  // Sends out data on button click
+        //{
+        //    if (serialPort != null) // Check to see if there is something in serial port
+        //    {
+        //        //var dataPacket = txtSend.Text.ToString();   // Converts data from text block to string
+        //        var dataPacket = ClockSend.Text.ToString();
+        //        dataWriterObject = new DataWriter(serialPort.OutputStream);
+        //        await SendPacket(dataPacket);
 
-                if (dataWriterObject != null)   // Handles situation if problem arrises
-                {
-                    dataWriterObject.DetachStream();
-                    dataWriterObject = null;
-                }
+        //        if (dataWriterObject != null)   // Handles situation if problem arrises
+        //        {
+        //            dataWriterObject.DetachStream();
+        //            dataWriterObject = null;
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         private async Task SendPacket(string value)
         {
@@ -287,19 +336,22 @@ namespace Clock
         private void DataReceived_Click(object sender, RoutedEventArgs e)   //Hides debugging menu
         {
             DataState = !DataState;
-            if(DataState == true)
+            if(DataState == true)   //If button is "true" then show debuging menu
             {
                 txtRecieved.Visibility = Visibility.Visible;
                 txtSend.Visibility = Visibility.Visible;
                 Packets.Visibility = Visibility.Visible;
+                //ClockSend.Visibility = Visibility.Visible;
             }
-            else if (DataState == false)
+            else if (DataState == false)    //If button is "false" then hide debugging menu
             {
                 txtRecieved.Visibility = Visibility.Collapsed;
                 txtSend.Visibility = Visibility.Collapsed;
                 Packets.Visibility = Visibility.Collapsed;
+                //ClockSend.Visibility = Visibility.Collapsed;
             }
 
         }
+
     }
 }
