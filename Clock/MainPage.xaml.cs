@@ -234,7 +234,7 @@ namespace Clock
                                         hourString = " " + hourString;
                                     }
 
-                                    toSend = toSend + hourString + ":" + minString + ":" + secString + amPM; //Combining all strings together
+                                    toSend = toSend + hourString + ":" + minString + ":" + secString + /*amPM*/; //Combining all strings together
                                     //var dataPacket = ClockSend.Text.ToString();
                                     dataWriterObject = new DataWriter(serialPort.OutputStream);
                                     await SendPacket(toSend);   //Sending string
