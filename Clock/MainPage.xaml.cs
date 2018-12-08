@@ -204,7 +204,8 @@ namespace Clock
                                     int secTX = DateTime.Now.Second;    //Variable created to track current seconds
                                     int minuteTX = DateTime.Now.Minute; //Variable created to track current minutes
                                     int hourTX = DateTime.Now.Hour;     //Variable created to track current hours
-                                    string amPM = "";
+                                    //string amPM = "";
+                                    string toSend = "###";
 
                                     string secString = secTX.ToString();    //Converted current seconds to string
                                     if (secTX < 10)
@@ -221,19 +222,19 @@ namespace Clock
                                     string hourString = hourTX.ToString();  //Converted current hours to string
                                     if (hourTX < 10)
                                     {
-                                        if (hourTX > 12)
-                                        {
-                                            amPM = " PM";
-                                            hourTX = hourTX - 12;
-                                        }
-                                        else
-                                        {
-                                            amPM = " AM";
-                                        }
+                                        //if (hourTX > 12)
+                                        //{
+                                        //    amPM = "PM";
+                                        //    hourTX = hourTX - 12;
+                                        //}
+                                        //else
+                                        //{
+                                        //    amPM = "AM";
+                                        //}
                                         hourString = " " + hourString;
                                     }
 
-                                    string toSend = "###" + hourString + ":" + minString + ":" + secString + amPM; //Combining all strings together
+                                    toSend = toSend + hourString + ":" + minString + ":" + secString + amPM; //Combining all strings together
                                     //var dataPacket = ClockSend.Text.ToString();
                                     dataWriterObject = new DataWriter(serialPort.OutputStream);
                                     await SendPacket(toSend);   //Sending string
